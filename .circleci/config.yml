@@ -16,6 +16,7 @@ jobs:
   test:
     docker:
       - image: cimg/node:16.10
+    resource_class: small
     steps:
       - setup_remote_docker:
           version: 20.10.8
