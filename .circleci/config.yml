@@ -1,10 +1,9 @@
 version: 2.1
 orbs:
-  node: circleci/node@5.0.1
+  node: circleci/node@5.1.0
   docker: circleci/docker@2.2.0
 jobs:
   build:
-    resource_class: medium_plus  # Update the resource class to a valid value
     docker:
       - image: cimg/node:16.10
     steps:
@@ -15,7 +14,6 @@ jobs:
           echo "Installing dependencies..."
           npm install
   test:
-    resource_class: medium_plus  # Update the resource class to a valid value
     docker:
       - image: cimg/node:16.10
     steps:
