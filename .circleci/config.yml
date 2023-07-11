@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.1
+  docker: circleci/docker@2.2.0
 jobs:
   build:
     docker:
@@ -23,6 +24,17 @@ jobs:
           echo "Running tests..."
           npm run test
 
+    push:
+      docker:
+        - image: cimg/node:16.10
+      steps:
+        - checkout
+        - node/install-packages:
+            pkg-manager: npm
+        - run: |
+            echo "Pushing to registry..."
+            npm run push
+
 workflows:
   simple_workflow:
     jobs:
@@ -30,3 +42,5 @@ workflows:
       - test:
           requires:
             - build
+      - docker/publish:
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
