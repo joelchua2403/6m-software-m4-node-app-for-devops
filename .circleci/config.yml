@@ -27,6 +27,7 @@ jobs:
   push:
     docker:
       - image: cimg/node:16.10
+      resource_class: medium
     steps:
       - setup_remote_docker:
           version: 20.10.8
