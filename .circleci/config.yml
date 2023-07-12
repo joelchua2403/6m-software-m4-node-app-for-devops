@@ -16,6 +16,17 @@ jobs:
   test:
     docker:
       - image: cimg/node:16.10
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run: |
+          echo "Running tests..."
+          npm run test
+
+  push:
+    docker:
+      - image: cimg/node:16.10
     resource_class: small
     steps:
       - setup_remote_docker:
@@ -24,12 +35,6 @@ jobs:
       - run: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
       - run: docker build -t nodeappfordevops .
       - run: docker push nodeappfordevops
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - run: |
-          echo "Running tests..."
-          npm run test
 workflows:
   simple_workflow:
     jobs:
@@ -37,3 +42,9 @@ workflows:
       - test:
           requires:
             - build
+      - push:
+          requires:
+            - test
+          filters:
+            branches:
+              only: main
