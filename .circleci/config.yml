@@ -105,12 +105,26 @@ workflows:
   simple_workflow:
     jobs:
       - build
+          filters:
+            branches:
+              only: main
       - test:
           requires:
             - build
+          filters:
+            branches:
+              only: main  #filter by branch
       - build-and-push:
           requires:
             - test
       - deploy:
           requires:
             - build-and-push
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/  #filter by tags semenatic versioning
+
+
+
+
+
