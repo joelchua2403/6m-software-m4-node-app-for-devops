@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
-  node: circleci/node@5.1.0
-  docker: circleci/docker@2.2.0
+  node: circleci/node@5.0.1
+  docker: circleci/docker@2.1.4
 jobs:
   build:
     docker:
@@ -23,18 +23,19 @@ jobs:
       - run: |
           echo "Running tests..."
           npm run test
-
-  push:
-    docker:
-      - image: cimg/node:16.10
-    resource_class: medium
+  build-and-push:
+    executor: docker/docker
     steps:
-      - setup_remote_docker:
-          version: 20.10.8
+      - setup_remote_docker
       - checkout
-      - run: echo "${DOCKERHUB_PASSWORD}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
-      - run: docker build -t nodeappfordevops .
-      - run: docker push nodeappfordevops
+      - docker/check
+      - docker/build:
+          image: terencegaffudsu/education-space
+          tag: 0.1.0
+      - docker/push:
+          image: terencegaffudsu/education-space
+          tag: 0.1.0
+
 workflows:
   simple_workflow:
     jobs:
@@ -42,9 +43,6 @@ workflows:
       - test:
           requires:
             - build
-      - push:
+      - build-and-push:
           requires:
             - test
-          filters:
-            branches:
-              only: main
