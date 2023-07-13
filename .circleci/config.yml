@@ -98,8 +98,8 @@ jobs:
             name: Heroku Container Push
             command: | 
                 heroku container:login
-                heroku container:push web -a terencegaffud-su-devops
-                heroku container:release web -a terencegaffud-su-devops
+                heroku container:push web -a joelchua-devops
+                heroku container:release web -a joelchua-devops
 
 workflows:
   simple_workflow:
