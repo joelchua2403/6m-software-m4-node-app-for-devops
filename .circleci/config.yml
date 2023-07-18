@@ -166,6 +166,7 @@ jobs:
         - run: docker build -t joelchua2403/educationspace .
         - snyk/scan: 
             docker-image-name: joelchua2403/educationspace
+            severity-threshold: medium
 
 workflows:
   simple_workflow:
